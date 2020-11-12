@@ -10,6 +10,7 @@ import userModel from "./models/user.model";
 const LocalStrategy = local.Strategy;
 
 const logic = async (email, password, cb) => {
+  console.log("email==>", email, "password==>", password);
   try {
     const user = await userModel.findOne({ email });
 
@@ -29,8 +30,7 @@ const logic = async (email, password, cb) => {
       });
 
     const data = {
-      firstName: user.firstName,
-      lastName: user.lastName,
+      name: user.name,
       email: user.email,
     };
 

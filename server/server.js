@@ -1,6 +1,5 @@
 // importing packages
 import express from "express";
-import path from "path";
 import morgan from "morgan";
 import dotenv from "dotenv";
 
@@ -30,21 +29,14 @@ app.use(morgan("dev"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(__dirname));
-app.use(express.static(path.join(__dirname, "../src/client/build")));
 
 // routes
 app.use("/api/", unprotectedRoute);
 
 // 404 error handling
-app.use("/api/*", (req, res, next) => {
+app.use("/*", (req, res, next) => {
   const err = new Error("Path not found");
   next(err);
-});
-
-// react routes
-app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "../src/client/build", "index.html"));
 });
 
 // global error handler
