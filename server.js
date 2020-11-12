@@ -13,6 +13,10 @@ import unprotectedRoute from "./routes/unprotected.route";
 // connecting to database
 import "./database";
 
+// passport strategies
+import "./local.passport";
+import "./middlewares/passport.middleware";
+
 dotenv.config();
 
 // init app
