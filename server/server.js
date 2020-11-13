@@ -2,12 +2,14 @@
 import express from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import passport from "passport";
 
 // response function
 import response from "./utils/response";
 
 // routes
 import unprotectedRoute from "./routes/unprotected.route";
+import protectedRoute from "./routes/protected.route";
 
 // connecting to database
 import "./database";
@@ -31,7 +33,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // routes
-app.use("/api/", unprotectedRoute);
+app.use("/api/auth", unprotectedRoute);
+app.use(
+  "/api/protected",
+  passport.authenticate("jwt", { session: false }),
+  protectedRoute
+);
 
 // 404 error handling
 app.use("/*", (req, res, next) => {

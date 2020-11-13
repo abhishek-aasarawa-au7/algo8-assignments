@@ -11,5 +11,6 @@ const route = express.Router();
 // routes
 route.post("/signup", signUpChecker, checkError, userController.signup);
 route.post("/login", userController.login);
+route.post("/regenerate", userController.regenerate);
 
 export default route;
