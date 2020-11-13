@@ -4,6 +4,7 @@
   "description": "for assignments of algo8",
   "main": "server.js",
   "scripts": {
+    "heroku-postbuild": "npm i"
     "start": "npm run babel-build && node ./build/server.js",
     "babel-build": "npm run clean && babel -d ./build ./server -s",
     "clean": "rm -rf build && mkdir build",
