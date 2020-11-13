@@ -10,6 +10,7 @@ import response from "./utils/response";
 // routes
 import unprotectedRoute from "./routes/unprotected.route";
 import protectedRoute from "./routes/protected.route";
+import publicRoute from "./routes/public.route";
 
 // connecting to database
 import "./database";
@@ -34,6 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // routes
 app.use("/api/auth", unprotectedRoute);
+app.use("/api/public", publicRoute);
 app.use(
   "/api/protected",
   passport.authenticate("jwt", { session: false }),

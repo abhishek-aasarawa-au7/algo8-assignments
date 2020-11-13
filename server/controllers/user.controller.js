@@ -13,6 +13,10 @@ import catchError from "../utils/catchError";
 import createToken from "../utils/createToken";
 // refresh secret key
 import refreshKey from "../configs/refreshKey";
+// upload file
+import uploadXls from "../utils/upload";
+// file handling
+import { toXlsx, removeFile } from "../utils/toXlsx";
 
 const controller = {};
 
@@ -58,7 +62,7 @@ controller.login = (req, res, next) => {
   })(req, res);
 };
 
-// regenerating token
+// regenerating token -------------------------------------------------------------------
 controller.regenerate = catchError(async (req, res, next) => {
   let { refreshToken } = req.body;
 
@@ -79,5 +83,36 @@ controller.regenerate = catchError(async (req, res, next) => {
 controller.data = (req, res) => {
   response(res, [], "this is protected route", false, 200);
 };
+
+// making xlsx file ---------------------------------------------------------------------
+controller.xlsx = catchError(async (req, res, next) => {
+  const { pageNumber = 1 } = req.query;
+  // all user data
+  const users = await model
+    .find({})
+    .skip(20 * (pageNumber - 1))
+    .limit(20);
+  const data = users.map((user) => ({ name: user.name, email: user.email }));
+
+  // if there is no data
+  if (!!data && data.length === 0)
+    return response(res, [], "There is no data", true, 404);
+
+  // converting in xls
+  let url = await toXlsx(data);
+  if (!url)
+    return response(
+      res,
+      [],
+      "server facing issue in converting and uploading data",
+      true,
+      400
+    );
+
+  // if we get url
+  removeFile();
+
+  response(res, { url }, "successfully able to get url of xls", false, 200);
+});
 
 export default controller;
